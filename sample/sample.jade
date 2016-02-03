@@ -1,0 +1,17 @@
+div( p-model = 'hello' )
+    // hello.message
+    span( p-bind = 'message' )
+
+    div( model = 'world' )
+        // world.message
+        span( p-bind = 'message' )
+
+        div( model = 'hello' )
+            // hello.message
+            span( p-bind = 'message' )
+
+                div( model = 'world' )
+                    // world.message
+                    span( p-bind ='message' )
+
+script( src="require1k.min.js" data-main="./sample" )
