@@ -1,12 +1,12 @@
 'use strict';
 
 module.exports = Controller;
-
 var EventHandler = require( 'pristine-eventhandler' );
 
-console.log( EventHandler().on );
 
 function Controller( options ) {
+    'use strict';
+    
     if ( ! options ) {
         throw new Error( 'Controller invalid. No options given' );
     }
@@ -20,8 +20,6 @@ function Controller( options ) {
     var model = options.model || [];
     var parameters = options.parameters || []; // html parameters (unimplemented)
     var eventHandler = new EventHandler();
-
-    console.log( 'EVENTHANDLER:', eventHandler );
 
     function controllerFunction() {
         var controllerInterface = {};

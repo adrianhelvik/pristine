@@ -1,3 +1,5 @@
+'use strict';
+
 var Controller = require( '../index' );
 
 describe( 'Controller', () => {
@@ -13,23 +15,7 @@ describe( 'Controller', () => {
         expect( fn() ).toBe( controller.execute() );
     } );
 
-    it( 'exposes events', () => {
-        var controller = Controller( {
-            fn: function () {}
-        } );
-
-        var executed = false;
-
-        controller.on( 'update', () => {
-            var executed = true;
-        } );
-
-        controller.execute();
-
-        expect( executed ).toBe( true );
-    } );
-
-    xit( 'executes the given function when called', () => {
+    it( 'executes the given function when called', () => {
 
         var executed = false;
         
@@ -39,12 +25,31 @@ describe( 'Controller', () => {
             }
         } );
 
-        controller();
+        controller.execute();
 
         expect( executed ).toBe( true );
     } );
 
-    xit( 'injects given dependencies', () => {
+    it( 'calls update event when model is updated', () => {
+        var controller = Controller( {
+            model: [ 'value' ],
+            fn: function () {
+                this.value = 10;
+            }
+        } );
+
+        var executed = 'not executed';
+
+        controller.on( 'update', () => {
+            executed = 'executed';
+        } );
+
+        controller.execute();
+
+        expect( executed ).toBe( 'executed' );
+    } );
+
+    it( 'injects given dependencies', () => {
 
         var value = 0;
 
@@ -55,36 +60,36 @@ describe( 'Controller', () => {
             }
         } );
 
-        controller();
+        controller.execute();
 
         expect( value ).toBe( 42 );
     } )
 
-    xit( 'throws an exception when trying to access a value not in the model', () => {
+    it( 'throws an exception when trying to access a value not in the model', () => {
 
         var controller = new Controller( {
+            model: [ 'id' ],
             fn: function () {
+                this.id = 10;
                 this.x = 10;
             }
         } );
 
-        expect( controller ).toThrow();
+        expect( controller.execute ).toThrow(); // in strict mode only
     } );
 
-    xit( 'allows changing then model', () => {
+    it( 'allows changing then model', () => {
         
         var controller = new Controller( {
             model: [ 'value' ],
             fn: function () {
                 this.value = 42;
 
-                // expect( this.value ).toBe( 42 );
+                expect( this.value ).toBe( 42 );
             }
         } );
 
-        controller();
+        controller.execute();
+
     } );
-
-    xit( 'calls event "updated", after updating the model' );
-
 } );
