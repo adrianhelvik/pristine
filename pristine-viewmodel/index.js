@@ -1,6 +1,6 @@
 'use strict';
 
-module.exports = View;
+module.exports = ViewModel;
 
 var Controller = require( 'pristine-controller' );
 var EventHandler = require( 'pristine-eventhandler' );

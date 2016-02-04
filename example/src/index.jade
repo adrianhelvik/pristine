@@ -1,3 +1,6 @@
+doctype html
+meta( charset = 'utf-8' )
+
 div( p-model = 'hello' )
     // hello.message
     span( p-bind = 'message' )
@@ -14,4 +17,4 @@ div( p-model = 'hello' )
                     // world.message
                     span( p-bind ='message' )
 
-script( src="require1k.min.js" data-main="./sample" )
+script( src = 'bundle.js' )

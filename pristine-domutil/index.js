@@ -1,5 +1,5 @@
 module.exports = {
-    subtreeWithoutAttributes: subtreeWithoutAttributes
+    subtreeWithoutAttributes: subtreeWithoutAttributes,
     subtreeWithoutAttribute: subtreeWithoutAttributes // alias
 };
 

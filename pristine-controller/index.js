@@ -2,6 +2,10 @@
 
 module.exports = Controller;
 
+var EventHandler = require( 'pristine-eventhandler' );
+
+console.log( EventHandler().on );
+
 function Controller( options ) {
     if ( ! options ) {
         throw new Error( 'Controller invalid. No options given' );
@@ -13,17 +17,21 @@ function Controller( options ) {
 
     var controller = options.fn;
     var dependencies = options.dependencies || [];
-    var interfaceValues = options.interface || [];
-    var parameters = options.parameters || [];
+    var model = options.model || [];
+    var parameters = options.parameters || []; // html parameters (unimplemented)
+    var eventHandler = new EventHandler();
+
+    console.log( 'EVENTHANDLER:', eventHandler );
 
     function controllerFunction() {
         var controllerInterface = {};
         var storage = {};
 
-        interfaceValues.forEach( function ( key ) {
+        model.forEach( function ( key ) {
             Object.defineProperty( controllerInterface, key, {
                 set: function ( value ) {
                     storage[ key ] = value;
+                    eventHandler.emit( 'update' );
                 },
                 get: function () {
                     return storage[ key ];
@@ -33,8 +41,12 @@ function Controller( options ) {
 
         Object.freeze( controllerInterface );
 
-        controller.call( controllerInterface, dependencies );
+        return controller.call( controllerInterface, dependencies );
     };
 
-    return controllerFunction;
+    return {
+        execute: controllerFunction,
+        on: eventHandler.on,
+        emit: eventHandler.emit
+    }
 }

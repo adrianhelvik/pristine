@@ -5,14 +5,22 @@ module.exports = EventHandler;
 function EventHandler() {
 
     var self = {
-        events: {}
+        events: {},
+        on: on,
+        emit: emit
     };
 
     return self;
 
     function emit( eventNames, options ) {
-        if ( eventNames = eventNames.split( /\s+/ ).length > 1 ) {
-            eventNames.forEach( function ( eventName ) {
+        if ( typeof eventNames !== 'string' ) {
+            throw Error( 'First argument of EventHandler.emit must be a string of event names split by spaces' );
+        }
+
+        var split = eventNames.split( /\s+/ );
+
+        if ( split.length > 1 ) {
+            split.forEach( function ( eventName ) {
                 emit( eventName, options )
             } );
             return;
@@ -30,14 +38,23 @@ function EventHandler() {
     }
 
     function on( eventNames, fn ) {
-        if ( eventNames = eventNames.split( /\s+/ ).length > 1 ) {
-            eventNames.forEach( function ( eventName ) {
-                emit( eventName, options )
+        if ( typeof fn !== 'function' ) {
+            throw Error( 'Second parameter of EventHandler.on must be a function' );
+        }
+
+        var split = eventNames.split( /\s+/ );
+        if ( split.length > 1 ) {
+            split.forEach( function ( eventName ) {
+                on( eventName, fn );
             } );
             return;
         }
 
         var eventName = eventNames;
+
+        if ( ! self.events[ eventName ] ) {
+            self.events[ eventName ] = [];
+        }
 
         self.events[ eventName ].push( fn );
     }
